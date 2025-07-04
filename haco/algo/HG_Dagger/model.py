@@ -27,6 +27,11 @@ class Model(nn.Module):
 
 
 class Ensemble(nn.Module):
+    """
+    The Ensemble class is a PyTorch neural network module that manages a collection 
+    (ensemble) of multiple policy networks (instances of the Model class). 
+    It is used to improve robustness and uncertainty estimation in decision making.
+    """
     # Multiple policies
     def __init__(self, observation_shape, action_shape, device, hidden_sizes=(256, 256), num_nets=5):
         super().__init__()
@@ -41,6 +46,10 @@ class Ensemble(nn.Module):
             pi.to(device).float()
 
     def act(self, obs, i=-1):
+        """
+        Given an observation, returns the average action predicted 
+        by all networks in the ensemble 
+        """
         obs = torch.as_tensor(obs, dtype=torch.float32, device=self.device)
         with torch.no_grad():
             if i >= 0:  # optionally, only use one of the nets.
@@ -51,6 +60,10 @@ class Ensemble(nn.Module):
             return np.mean(np.array(vals), axis=0)
 
     def variance(self, obs):
+        """
+        Computes the mean variance of the actions predicted by the ensemble, 
+        which can be used as a measure of uncertainty.
+        """
         obs = torch.as_tensor(obs, dtype=torch.float32, device=self.device)
         with torch.no_grad():
             vals = list()
@@ -58,6 +71,7 @@ class Ensemble(nn.Module):
                 vals.append(pi(obs).cpu().numpy())
             return np.square(np.std(np.array(vals), axis=0)).mean()
 
+    # Load or save the state of all networks in the ensemble from/to disk.
     def load(self, path):
         state = torch.load(path)
         for net_id, net_state in state.items():

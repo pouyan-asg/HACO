@@ -47,12 +47,15 @@ class Experiment(object):
         self.info = lambda **kwargs: self._log.info(_format(**kwargs))
 
     def load_config(self, model_path):
+        """Loads a configuration dictionary from a JSON file."""
         log_dir = Path(model_path).parent
 
         with open(str(log_dir / 'config.json'), 'r') as f:
             return json.load(f)
 
     def save_config(self, config_dict):
+        """Saves a configuration dictionary to a JSON file.
+        Recursively converts all non-float/int values to strings."""
         def _process(x):
             for key, val in x.items():
                 if isinstance(val, dict):
@@ -68,6 +71,7 @@ class Experiment(object):
             json.dump(config, f, indent=4, sort_keys=True)
 
     def scalar(self, is_train=True, **kwargs):
+        """Stores scalar values (metrics) for logging and TensorBoard."""
         for k, v in sorted(kwargs.items()):
             key = (is_train, k)
 
@@ -77,6 +81,13 @@ class Experiment(object):
             self.scalars[key].append(v)
 
     def end_iteration(self, epoch, net=None):
+        """ 
+        Finalizes logging and saving for an epoch.
+        For each stored scalar metric:
+            - Computes mean, std, min, and max.
+            - Logs these statistics.
+            - Writes the mean to TensorBoard (train or eval).
+        """
         self.info(Epoch=epoch)
         for (is_train, k), v in self.scalars.items():
             info = OrderedDict()

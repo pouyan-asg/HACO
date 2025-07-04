@@ -1,0 +1,456 @@
+Failure # 1 (occurred at 2025-07-02_14-09-19)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478047, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+
+Failure # 2 (occurred at 2025-07-02_14-09-25)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478030, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+
+Failure # 3 (occurred at 2025-07-02_14-09-31)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478043, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+
+Failure # 4 (occurred at 2025-07-02_14-09-38)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478037, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+
+Failure # 5 (occurred at 2025-07-02_14-09-44)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478034, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+
+Failure # 6 (occurred at 2025-07-02_14-09-51)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AttributeError): [36mray::HACO.train()[39m (pid=478051, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 1 more time]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/rollout_ops.py", line 70, in sampler
+    yield workers.local_worker().sample()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/rollout_worker.py", line 579, in sample
+    batches = [self.input_reader.next()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 93, in next
+    batches = [self.get_data()]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 209, in get_data
+    item = next(self.rollout_provider)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/evaluation/sampler.py", line 548, in _env_runner
+    base_env.poll()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/base_env.py", line 325, in poll
+    self.new_obs = self.vector_env.vector_reset()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in vector_reset
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/env/vector_env.py", line 133, in <listcomp>
+    return [e.reset() for e in self.envs]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/gym/core.py", line 323, in reset
+    return self.env.reset(**kwargs)
+  File "/home/pouyan/phd/imitation_learning/imitation/examples/hg_dagger/repositories/HACO/haco/utils/human_in_the_loop_env.py", line 77, in reset
+    ret = super(HumanInTheLoopEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/safe_metadrive_env.py", line 34, in reset
+    return super(SafeMetaDriveEnv, self).reset(*args, **kwargs)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 318, in reset
+    self.lazy_init()  # it only works the first time when reset() is called to avoid the error when render
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/envs/base_env.py", line 220, in lazy_init
+    self.engine = initialize_engine(self.config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/engine_utils.py", line 11, in initialize_engine
+    cls.singleton = cls(env_global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/base_engine.py", line 28, in __init__
+    EngineCore.__init__(self, global_config)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/metadrive/engine/core/engine_core.py", line 169, in __init__
+    gltf.patch_loader(self.loader)
+AttributeError: module 'gltf' has no attribute 'patch_loader'
+

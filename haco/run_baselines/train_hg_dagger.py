@@ -16,7 +16,7 @@ create -n haco-hg-dagger python version=3.7
 """
 
 # hyperpara
-BC_WARMUP_DATA_USAGE = 30000  # use human data to do warm up
+BC_WARMUP_DATA_USAGE = 30000  # use human data to do warm up (maximum number of samples)
 NUM_ITS = 5
 STEP_PER_ITER = 5000
 learning_rate = 5e-4
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         "hg_dagger_lr_{}_bs_{}_sgd_iter_{}_iter_batch_{}".format(learning_rate, batch_size, num_sgd_epoch,
                                                                  STEP_PER_ITER), tm_stamp)
     exp_log = Experiment()
-    exp_log.init(log_dir=log_dir)
+    exp_log.init(log_dir=log_dir)  # TODO chnage init function to __init__ for the class Experiment
     model_save_path = os.path.join(log_dir, "hg_dagger_models")
     os.mkdir(model_save_path)
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         sample_start = time.time()
 
         while True:
-
+            # main loop
             next_state, r, done, info = training_env.step(np.array([agent.act(torch.tensor(state, device=device))]))
             next_state = next_state[0]
             r = r[0]

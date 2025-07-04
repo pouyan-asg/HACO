@@ -142,7 +142,7 @@ def evaluation(env, model, evaluation_episode_num=30, exp_log=None):
 
 def load_human_data(path, data_usage=5000):
     """
-   This method reads the states and actions recorded by human expert in the form of episode
+   This method reads the states and actions recorded by human expert in the form of episode.
    """
     with open(path, "r") as f:
         episode_data = json.load(f)["data"]
