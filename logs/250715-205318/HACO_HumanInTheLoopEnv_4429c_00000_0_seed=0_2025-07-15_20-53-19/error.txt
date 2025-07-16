@@ -1,0 +1,54 @@
+Failure # 1 (occurred at 2025-07-15_20-53-52)
+Traceback (most recent call last):
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 515, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 488, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/worker.py", line 1428, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(IndexError): [36mray::HACO.train()[39m (pid=2602562, ip=192.168.2.18)
+  File "python/ray/_raylet.pyx", line 484, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 438, in ray._raylet.execute_task.function_executor
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 519, in train
+    raise e
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 505, in train
+    result = Trainable.train(self)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/tune/trainable.py", line 336, in train
+    result = self.step()
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 134, in step
+    res = next(self.train_exec_impl)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 843, in apply_filter
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 1075, in build_union
+    item = next(it)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 756, in __next__
+    return next(self.built_iterator)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/util/iter.py", line 783, in apply_foreach
+    for item in it:
+  [Previous line repeated 2 more times]
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/replay_ops.py", line 89, in gen_replay
+    item = local_buffer.replay()
+  File "/home/pouyan/phd/imitation_learning/hgdagger/HACO/haco/utils/replay_buffer.py", line 120, in replay
+    samples[policy_id] = samples[policy_id].concat(replay_buffer.sample(bs_human))
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/replay_buffer.py", line 83, in sample
+    return self._encode_sample(idxes)
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/execution/replay_buffer.py", line 64, in _encode_sample
+    out = SampleBatch.concat_samples([self._storage[i] for i in idxes])
+  File "/home/pouyan/anaconda3/envs/haco/lib/python3.7/site-packages/ray/rllib/policy/sample_batch.py", line 102, in concat_samples
+    if isinstance(samples[0], MultiAgentBatch):
+IndexError: list index out of range
+

@@ -129,5 +129,5 @@ def make_env(use_render=False):
 
 
 if __name__ == "__main__":
-    ckpt_path = None
+    ckpt_path = "/home/pouyan/phd/imitation_learning/hgdagger/HACO/logs/hg_dagger_lr_0.0005_bs_256_sgd_iter_1000_iter_batch_1000/250715-215338/hg_dagger_models/model_4.pth"
     evaluate_once(ckpt_path, "hg_dagger_model_3_eval_results", "hg_dagger")

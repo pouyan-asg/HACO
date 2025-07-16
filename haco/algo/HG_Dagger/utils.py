@@ -5,9 +5,10 @@ import json
 import os
 import pickle
 import time
-
 import numpy as np
 import torch
+from torch.utils.data import TensorDataset, DataLoader
+from tqdm import tqdm
 
 
 def save_results(episode_rewards, results_dir="./results", result_file_name="training_result"):
@@ -63,43 +64,145 @@ def shuffle_data(X_train, y_train):
     return X_train, y_train
 
 
-def train_model(model, X_train, y_train, path, num_epochs=50, learning_rate=1e-3, lambda_l2=1e-5,
-                batch_size=32, shuffle=True, exp_log=None, log_interval=10):
+# def train_model(model, X_train, y_train, path, num_epochs=50, learning_rate=1e-3, lambda_l2=1e-5,
+#                 batch_size=32, shuffle=True, exp_log=None, log_interval=10,):
+    
+#     """
+#     For a specified number of epochs (num_epochs):
+#         - Optionally shuffles the data at the start of each epoch.
+#         - Splits the data into batches.
+#         - For each batch, and for each network in the ensemble:
+#             -- Computes predictions.
+#             -- Calculates the loss.
+#             -- Performs backpropagation and optimizer step to update the network weights.
+#         - Optionally logs training statistics at intervals.
+#     """
+
+#     X_train = np.array(X_train)
+#     y_train = np.array(y_train)
+#     criterion = torch.nn.MSELoss()
+#     optimizer = [torch.optim.SGD(model.pis[i].parameters(), lr=learning_rate, weight_decay=lambda_l2) for i in
+#                  range(model.num_nets)]  # built-in L2
+#     train_start = time.time()
+#     X_train_torch = torch.from_numpy(X_train).to(model.device).float()
+#     y_train_torch = torch.from_numpy(y_train).to(model.device).float()
+#     total_loss = []
+#     sgd_num = len(X_train_torch) / batch_size
+#     for t in range(num_epochs):
+#         if shuffle:
+#             X_train, y_train = shuffle_data(X_train, y_train)
+#         epoch_loss = 0
+#         for i in range(0, len(X_train_torch), batch_size):
+#             curr_X = X_train_torch[i:i + batch_size]
+#             curr_Y = y_train_torch[i:i + batch_size]
+#             for i in range(model.num_nets):
+#                 preds = model.pis[i](curr_X)
+#                 loss = criterion(preds, curr_Y)
+#                 total_loss.append(loss.item())
+#                 epoch_loss += loss.item()
+#                 optimizer[i].zero_grad()
+#                 loss.backward()
+#                 optimizer[i].step()
+#         if exp_log is not None and t % log_interval == 0:
+#             current_time = time.time()
+#             exp_log.scalar(is_train=True,
+#                            data_set_size=len(X_train),
+#                            epoch_loss=epoch_loss / sgd_num / model.num_nets,
+#                            ensemble_variance=model.variance(X_train),
+#                            epoch_training_time=(current_time - train_start) / log_interval)
+#             train_start = current_time
+#     exp_log.scalar(is_train=True,
+#                    last_epoch_loss=epoch_loss / sgd_num / model.num_nets,
+#                    total_sgd_epoch_num=num_epochs)
+#     model.save(path)
+
+
+def train_model(
+    model,
+    X_train,
+    y_train,
+    path,
+    num_epochs=50,
+    num_batches=None,
+    batch_size=32,
+    minibatch_size=None,
+    learning_rate=1e-3,
+    lambda_l2=1e-5,
+    shuffle=True,
+    exp_log=None,
+    log_interval=10,
+    on_epoch_end=None,
+    on_batch_end=None,
+    log_rollouts_fn=None,
+    log_rollouts_n_episodes=5,
+    progress_bar=True,
+):
+    """
+    Trains the model using supervised learning, similar to imitation.algorithms.bc.BC.train.
+    Supports both epoch-based and batch-based stopping, minibatch training, and logging.
+    """
     X_train = np.array(X_train)
     y_train = np.array(y_train)
+    device = model.device
+
+    minibatch_size = minibatch_size or batch_size
+    assert batch_size % minibatch_size == 0, "batch_size must be a multiple of minibatch_size"
+
+    dataset = TensorDataset(
+        torch.from_numpy(X_train).float(),
+        torch.from_numpy(y_train).float()
+    )
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, drop_last=True)
+
+    optimizer = [torch.optim.SGD(model.pis[i].parameters(), lr=learning_rate, weight_decay=lambda_l2)
+                 for i in range(model.num_nets)]
     criterion = torch.nn.MSELoss()
-    optimizer = [torch.optim.SGD(model.pis[i].parameters(), lr=learning_rate, weight_decay=lambda_l2) for i in
-                 range(model.num_nets)]  # built-in L2
-    train_start = time.time()
-    X_train_torch = torch.from_numpy(X_train).to(model.device).float()
-    y_train_torch = torch.from_numpy(y_train).to(model.device).float()
-    total_loss = []
-    sgd_num = len(X_train_torch) / batch_size
-    for t in range(num_epochs):
-        if shuffle:
-            X_train, y_train = shuffle_data(X_train, y_train)
+
+    total_batches = 0
+    total_epochs = 0
+    stop_by_batches = num_batches is not None
+    stop_by_epochs = num_epochs is not None
+
+    if progress_bar:
+        epoch_iter = tqdm(range(num_epochs if num_epochs else 999999), desc="Epochs")
+    else:
+        epoch_iter = range(num_epochs if num_epochs else 999999)
+
+    for epoch in epoch_iter:
         epoch_loss = 0
-        for i in range(0, len(X_train_torch), batch_size):
-            curr_X = X_train_torch[i:i + batch_size]
-            curr_Y = y_train_torch[i:i + batch_size]
-            for i in range(model.num_nets):
-                preds = model.pis[i](curr_X)
-                loss = criterion(preds, curr_Y)
-                total_loss.append(loss.item())
-                epoch_loss += loss.item()
-                optimizer[i].zero_grad()
-                loss.backward()
-                optimizer[i].step()
-        if exp_log is not None and t % log_interval == 0:
-            current_time = time.time()
-            exp_log.scalar(is_train=True,
-                           data_set_size=len(X_train),
-                           epoch_loss=epoch_loss / sgd_num / model.num_nets,
-                           ensemble_variance=model.variance(X_train),
-                           epoch_training_time=(current_time - train_start) / log_interval)
-            train_start = current_time
+        for batch_idx, (batch_X, batch_Y) in enumerate(data_loader):
+            batch_X = batch_X.to(device)
+            batch_Y = batch_Y.to(device)
+            # Minibatch gradient accumulation
+            mini_batches = batch_X.split(minibatch_size), batch_Y.split(minibatch_size)
+            for mini_X, mini_Y in zip(*mini_batches):
+                for i in range(model.num_nets):
+                    preds = model.pis[i](mini_X)
+                    loss = criterion(preds, mini_Y)
+                    optimizer[i].zero_grad()
+                    loss.backward()
+                    optimizer[i].step()
+                    epoch_loss += loss.item()
+            total_batches += 1
+            if exp_log is not None and total_batches % log_interval == 0:
+                exp_log.scalar(is_train=True, batch_loss=epoch_loss / (batch_idx + 1))
+            if on_batch_end is not None:
+                on_batch_end()
+            if stop_by_batches and total_batches >= num_batches:
+                break
+        total_epochs += 1
+        if exp_log is not None:
+            exp_log.scalar(is_train=True, epoch_loss=epoch_loss / (batch_idx + 1), epoch=epoch)
+        if on_epoch_end is not None:
+            on_epoch_end()
+        if log_rollouts_fn is not None and epoch % log_interval == 0:
+            log_rollouts_fn(model, n_episodes=log_rollouts_n_episodes)
+        if stop_by_epochs and total_epochs >= num_epochs:
+            break
+        if stop_by_batches and total_batches >= num_batches:
+            break
     exp_log.scalar(is_train=True,
-                   last_epoch_loss=epoch_loss / sgd_num / model.num_nets,
+                   last_epoch_loss=epoch_loss / model.num_nets,
                    total_sgd_epoch_num=num_epochs)
     model.save(path)
 
@@ -143,7 +246,18 @@ def evaluation(env, model, evaluation_episode_num=30, exp_log=None):
 def load_human_data(path, data_usage=5000):
     """
    This method reads the states and actions recorded by human expert in the form of episode.
+
+   JSON file format:
+   {"data": [{"obs": [...], "actions": [...], "new_obs": [...], "dones": true, "rewards": 10.0, 
+   "infos": {"overtake_vehicle_num": 0, "velocity": 40.5427555821617, "steering": 5.7071055484513844e-05, 
+   "acceleration": 1.0, "step_energy": 0.055042554583704904, "episode_energy": 13.221688095921278, 
+   "crash_vehicle": false, "crash_object": false, "crash_building": false, "out_of_road": false, 
+   "arrive_dest": true, "crash": false, "step_reward": 1.2303852092679042, "cost": 0, "total_cost": 0, 
+   "max_step": false, "episode_reward": 306.60395237685236, "episode_length": 272, "takeover_start": false, 
+   "takeover": false, "takeover_cost": 0, "total_takeover_cost": 0, "native_cost": 0, "total_native_cost": 0}}], 
+   "episode_reward": [...], "episode_cost": [0, 0, 0], "success_rate": 1.0, "episode_len": [...]}
    """
+    
     with open(path, "r") as f:
         episode_data = json.load(f)["data"]
     np.random.shuffle(episode_data)

@@ -22,27 +22,17 @@ def _format(**kwargs):
 
 
 class Experiment(object):
-    def init(self, log_dir):
-        """
-        This MUST be called.
-        """
+    def __init__(self, log_dir):
         self._log = logger
         self.epoch = 0
         self.scalars = OrderedDict()
-
         self.log_dir = Path(log_dir).resolve()
         self.log_dir.mkdir(parents=True, exist_ok=True)
-
-        # for i in self._log._handlers:
-        #     self._log.remove(i)
-
         self._writer_train = SummaryWriter(str(self.log_dir / 'train'))
         self._writer_val = SummaryWriter(str(self.log_dir / 'val'))
         self._log.add(
             str(self.log_dir / 'log.txt'),
             format='{time:MM/DD/YY HH:mm:ss} {level}\t{message}')
-
-        # Functions.
         self.debug = self._log.debug
         self.info = lambda **kwargs: self._log.info(_format(**kwargs))
 

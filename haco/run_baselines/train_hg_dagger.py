@@ -6,6 +6,8 @@ from haco.algo.HG_Dagger.utils import *
 from haco.utils.config import baseline_eval_config, baseline_train_config
 from haco.utils.human_in_the_loop_env import HumanInTheLoopEnv
 from stable_baselines3.common.vec_env.subproc_vec_env import SubprocVecEnv
+import datetime
+import os
 
 """
 requirement for IWR/HG-Dagger/GAIl:
@@ -16,14 +18,14 @@ create -n haco-hg-dagger python version=3.7
 """
 
 # hyperpara
-BC_WARMUP_DATA_USAGE = 30000  # use human data to do warm up (maximum number of samples)
+BC_WARMUP_DATA_USAGE = 1000  # use human data to do warm up (maximum number of samples)
 NUM_ITS = 5
-STEP_PER_ITER = 5000
+STEP_PER_ITER = 1000
 learning_rate = 5e-4
 batch_size = 256
 
-need_eval = False  # we do not perform online evaluation. Instead, we evaluate by saved model
-evaluation_episode_num = 30
+# need_eval = False  # we do not perform online evaluation. Instead, we evaluate by saved model
+# evaluation_episode_num = 30
 num_sgd_epoch = 1000  # sgd epoch on data set
 device = "cuda"
 
@@ -31,29 +33,36 @@ device = "cuda"
 training_config = baseline_train_config
 training_config["use_render"] = True
 training_config["manual_control"] = True
+training_config["main_exp"] = True
 eval_config = baseline_eval_config
 
 if __name__ == "__main__":
-    tm = time.localtime(time.time())
-    tm_stamp = "%s-%s-%s-%s-%s-%s" % (tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec)
-    log_dir = os.path.join(
-        "hg_dagger_lr_{}_bs_{}_sgd_iter_{}_iter_batch_{}".format(learning_rate, batch_size, num_sgd_epoch,
-                                                                 STEP_PER_ITER), tm_stamp)
-    exp_log = Experiment()
-    exp_log.init(log_dir=log_dir)  # TODO chnage init function to __init__ for the class Experiment
+    tm_stamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
+    folder_dir = os.path.join(
+        "hg_dagger_lr_{}_bs_{}_sgd_iter_{}_iter_batch_{}".format(
+            learning_rate, batch_size, num_sgd_epoch, STEP_PER_ITER), tm_stamp)
+
+    root_path = "/home/pouyan/phd/imitation_learning/hgdagger/HACO/logs"
+    log_dir = os.path.join(root_path, folder_dir)
+
+    exp_log = Experiment(log_dir)
     model_save_path = os.path.join(log_dir, "hg_dagger_models")
     os.mkdir(model_save_path)
 
-    training_env = SubprocVecEnv(
-        [lambda: HumanInTheLoopEnv(training_config)])  # seperate with eval env to avoid metadrive collapse
+    # seperate with eval env to avoid metadrive collapse
+    training_env = SubprocVecEnv([lambda: HumanInTheLoopEnv(training_config)])
     eval_env = HumanInTheLoopEnv(eval_config)
+
     obs_shape = eval_env.observation_space.shape
     action_shape = eval_env.action_space.shape
 
-    # fill buffer with expert data
-    samples = load_human_data("../human_traj_100_new.json", data_usage=BC_WARMUP_DATA_USAGE)
+    # fill buffer with warmup expert data
+    samples = load_human_data(
+        "/home/pouyan/phd/imitation_learning/hgdagger/HACO/haco/utils/human_traj_3.json", 
+        data_usage=BC_WARMUP_DATA_USAGE)
 
     # train first epoch
+    print("\033[92m\nWarm up Training ...\n\033[0m")
     agent = Ensemble(obs_shape, action_shape, device=device).to(device).float()
     X_train, y_train = samples["state"], samples["action"]
     train_model(agent, X_train, y_train,
@@ -62,8 +71,8 @@ if __name__ == "__main__":
                 batch_size=batch_size,
                 learning_rate=learning_rate,
                 exp_log=exp_log)
-    if need_eval:
-        evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
+    # if need_eval:
+    #     evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
     exp_log.end_iteration(0)
 
     # count
@@ -75,12 +84,16 @@ if __name__ == "__main__":
         done_num = 0
         state = training_env.reset()[0]
         # for user friendly :)
+        print("\033[92m\nLet's Go!\033[0m")
+        print(f"\033[92m\nIteration: {iteration}\033[0m")
         training_env.env_method("stop")
-        print("Finish training iteration:{}, Press S to Start new iteration".format(iteration - 1))
+        print("\033[91m\nPress E to Start new iteration\033[0m")
         sample_start = time.time()
 
         while True:
             # main loop
+            if steps % 100 == 0:
+                print(f"\033[93m\nIteration: {iteration}, Steps: {steps}\033[0m")
             next_state, r, done, info = training_env.step(np.array([agent.act(torch.tensor(state, device=device))]))
             next_state = next_state[0]
             r = r[0]
@@ -92,7 +105,7 @@ if __name__ == "__main__":
             episode_reward += r
             episode_cost += info["native_cost"]
             if takeover:
-                # for hg dagger aggregate data only when takeover occurs
+                # aggregate data only when takeover occurs
                 samples["state"].append(state)
                 samples["action"].append(np.array(action))
                 samples["next_state"].append(next_state)
@@ -107,6 +120,7 @@ if __name__ == "__main__":
                 if info["arrive_dest"]:
                     success_num += 1
                 done_num += 1
+                print(f"\033[93mDone Num: {done_num}\033[0m")
                 if steps > STEP_PER_ITER:
                     exp_log.scalar(is_train=True, mean_episode_reward=episode_reward / done_num,
                                    mean_episode_cost=episode_cost / done_num,
@@ -124,8 +138,8 @@ if __name__ == "__main__":
                                 batch_size=batch_size,
                                 learning_rate=learning_rate,
                                 exp_log=exp_log)
-                    if need_eval:
-                        evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
+                    # if need_eval:
+                    #     evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
                     break
         exp_log.end_iteration(iteration)
     training_env.close()

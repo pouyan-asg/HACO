@@ -75,10 +75,20 @@ class DrivingCallbacks(DefaultCallbacks):
 
 
 class HACOCallbacks(DrivingCallbacks):
+    """
+    The HACOCallbacks class is a custom callback class for RLlib 
+    (Ray's reinforcement learning library) that extends DrivingCallbacks 
+    to provide detailed logging and metric collection during training and 
+    evaluation of autonomous driving agents, especially in the context of 
+    human-in-the-loop or safe RL (such as HG-DAgger or HACO).
+    """
     def on_episode_start(
             self, *, worker: RolloutWorker, base_env: BaseEnv, policies: Dict[str, Policy], episode: MultiAgentEpisode,
             env_index: int, **kwargs
     ):
+        """
+        Initializes lists and counters in episode.user_data to track statistics for the new episode.
+        """
         episode.user_data["velocity"] = []
         episode.user_data["steering"] = []
         episode.user_data["step_reward"] = []
@@ -97,6 +107,11 @@ class HACOCallbacks(DrivingCallbacks):
     def on_episode_step(
             self, *, worker: RolloutWorker, base_env: BaseEnv, episode: MultiAgentEpisode, env_index: int, **kwargs
     ):
+        """
+        At each step, extracts info from the environment and updates 
+        the tracked statistics (including incrementing the takeover count 
+        if a human intervened).
+        """
         info = episode.last_info_for()
         if info is not None:
             episode.user_data["velocity"].append(info["velocity"])
@@ -118,6 +133,11 @@ class HACOCallbacks(DrivingCallbacks):
     def on_episode_end(
             self, worker: RolloutWorker, base_env: BaseEnv, policies: Dict[str, Policy], episode: MultiAgentEpisode,
             **kwargs) -> None:
+        """
+        At the end of the episode, computes summary statistics 
+        (mean, max, min, rates, totals) and stores them in episode.custom_metrics 
+        for RLlib to log and aggregate.
+        """
         arrive_dest = episode.last_info_for()["arrive_dest"]
         crash = episode.last_info_for()["crash"]
         out_of_road = episode.last_info_for()["out_of_road"]

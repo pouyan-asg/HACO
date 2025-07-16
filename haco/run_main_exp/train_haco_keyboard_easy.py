@@ -1,5 +1,5 @@
 import datetime
-
+import os
 from haco.algo.haco.haco import HACOTrainer
 from haco.utils.callback import HACOCallbacks
 from haco.utils.human_in_the_loop_env import HumanInTheLoopEnv
@@ -7,15 +7,13 @@ from haco.utils.train import train
 from haco.utils.train_utils import get_train_parser
 
 
-def get_time_str():
-    return datetime.datetime.now().strftime("%y%m%d-%H%M%S")
-
-
 if __name__ == '__main__':
     args = get_train_parser().parse_args()
+    root_path = "/home/pouyan/phd/imitation_learning/hgdagger/HACO/logs"
+    timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 
-    exp_name = args.exp_name or "HACO_{}".format(get_time_str())
-    stop = {"timesteps_total": 8_0000}
+    exp_name = os.path.join(root_path, f"{timestamp}")
+    stop = {"timesteps_total": 1000}
 
     config = dict(
         env=HumanInTheLoopEnv,

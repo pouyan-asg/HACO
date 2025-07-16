@@ -1,0 +1,54 @@
+07/15/25 21:53:56 INFO	Epoch: 0
+07/15/25 21:53:56 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/15/25 21:53:56 INFO	Train_epoch_loss: 0.39	std: 0.11	min: 0.27	max: 1.82
+07/15/25 21:53:56 INFO	Train_batch_loss: 0.39	std: 0.09	min: 0.27	max: 1.21
+07/15/25 21:53:56 INFO	Train_last_epoch_loss: 0.17	std: 0.00	min: 0.17	max: 0.17
+07/15/25 21:53:56 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/15/25 21:58:06 INFO	Epoch: 1
+07/15/25 21:58:06 INFO	Train_buffer_size: 5.00	std: 0.00	min: 5	max: 5
+07/15/25 21:58:06 INFO	Train_mean_episode_cost: 2.50	std: 0.00	min: 2.50	max: 2.50
+07/15/25 21:58:06 INFO	Train_mean_episode_reward: 337.24	std: 0.00	min: 337.24	max: 337.24
+07/15/25 21:58:06 INFO	Train_mean_step_reward: 1.18	std: 0.00	min: 1.18	max: 1.18
+07/15/25 21:58:06 INFO	Train_sample_time: 215.43	std: 0.00	min: 215.43	max: 215.43
+07/15/25 21:58:06 INFO	Train_success_rate: 0.75	std: 0.00	min: 0.75	max: 0.75
+07/15/25 21:58:06 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/15/25 21:58:06 INFO	Train_epoch_loss: 0.63	std: 0.08	min: 0.55	max: 1.88
+07/15/25 21:58:06 INFO	Train_batch_loss: 0.63	std: 0.07	min: 0.55	max: 1.52
+07/15/25 21:58:06 INFO	Train_last_epoch_loss: 0.55	std: 0.00	min: 0.55	max: 0.55
+07/15/25 21:58:06 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/15/25 22:02:09 INFO	Epoch: 2
+07/15/25 22:02:09 INFO	Train_buffer_size: 5.00	std: 0.00	min: 5	max: 5
+07/15/25 22:02:09 INFO	Train_mean_episode_cost: 0.40	std: 0.00	min: 0.40	max: 0.40
+07/15/25 22:02:09 INFO	Train_mean_episode_reward: 241.28	std: 0.00	min: 241.28	max: 241.28
+07/15/25 22:02:09 INFO	Train_mean_step_reward: 1.05	std: 0.00	min: 1.05	max: 1.05
+07/15/25 22:02:09 INFO	Train_sample_time: 210.91	std: 0.00	min: 210.91	max: 210.91
+07/15/25 22:02:09 INFO	Train_success_rate: 0.60	std: 0.00	min: 0.60	max: 0.60
+07/15/25 22:02:09 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/15/25 22:02:09 INFO	Train_epoch_loss: 0.73	std: 0.07	min: 0.64	max: 1.90
+07/15/25 22:02:09 INFO	Train_batch_loss: 0.73	std: 0.06	min: 0.62	max: 1.50
+07/15/25 22:02:09 INFO	Train_last_epoch_loss: 0.76	std: 0.00	min: 0.76	max: 0.76
+07/15/25 22:02:09 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/15/25 22:05:48 INFO	Epoch: 3
+07/15/25 22:05:48 INFO	Train_buffer_size: 5.00	std: 0.00	min: 5	max: 5
+07/15/25 22:05:48 INFO	Train_mean_episode_cost: 0.00	std: 0.00	min: 0.00	max: 0.00
+07/15/25 22:05:48 INFO	Train_mean_episode_reward: 368.20	std: 0.00	min: 368.20	max: 368.20
+07/15/25 22:05:48 INFO	Train_mean_step_reward: 1.10	std: 0.00	min: 1.10	max: 1.10
+07/15/25 22:05:48 INFO	Train_sample_time: 180.54	std: 0.00	min: 180.54	max: 180.54
+07/15/25 22:05:48 INFO	Train_success_rate: 1.00	std: 0.00	min: 1.00	max: 1.00
+07/15/25 22:05:48 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/15/25 22:05:48 INFO	Train_epoch_loss: 0.71	std: 0.06	min: 0.61	max: 1.55
+07/15/25 22:05:48 INFO	Train_batch_loss: 0.71	std: 0.06	min: 0.60	max: 1.28
+07/15/25 22:05:48 INFO	Train_last_epoch_loss: 0.86	std: 0.00	min: 0.86	max: 0.86
+07/15/25 22:05:48 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/15/25 22:10:10 INFO	Epoch: 4
+07/15/25 22:10:10 INFO	Train_buffer_size: 5.00	std: 0.00	min: 5	max: 5
+07/15/25 22:10:10 INFO	Train_mean_episode_cost: 0.00	std: 0.00	min: 0.00	max: 0.00
+07/15/25 22:10:10 INFO	Train_mean_episode_reward: 365.41	std: 0.00	min: 365.41	max: 365.41
+07/15/25 22:10:10 INFO	Train_mean_step_reward: 1.01	std: 0.00	min: 1.01	max: 1.01
+07/15/25 22:10:10 INFO	Train_sample_time: 212.77	std: 0.00	min: 212.77	max: 212.77
+07/15/25 22:10:10 INFO	Train_success_rate: 1.00	std: 0.00	min: 1.00	max: 1.00
+07/15/25 22:10:10 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/15/25 22:10:10 INFO	Train_epoch_loss: 0.72	std: 0.06	min: 0.61	max: 1.23
+07/15/25 22:10:10 INFO	Train_batch_loss: 0.71	std: 0.06	min: 0.59	max: 1.11
+07/15/25 22:10:10 INFO	Train_last_epoch_loss: 1.10	std: 0.00	min: 1.10	max: 1.10
+07/15/25 22:10:10 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000

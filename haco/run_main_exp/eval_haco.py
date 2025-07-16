@@ -20,7 +20,7 @@ def get_function(exp_path, ckpt_idx):
 
 if __name__ == '__main__':
     # hyperparameters
-    CKPT_PATH = "D:\\code\\HACO\\haco\\run_main_exp\\HACO_221223-002810\\HACO_HumanInTheLoopEnv_b0fec_00000_0_seed=0_2022-12-23_00-28-15"
+    CKPT_PATH = "/home/pouyan/phd/imitation_learning/hgdagger/HACO/haco/run_main_exp/HACO_250715-115621/HACO_HumanInTheLoopEnv_41acd_00000_0_seed=0_2025-07-15_11-56-23"
     EPISODE_NUM_PER_CKPT = 2
     CKPT_START = 54
     CKPT_END = 55

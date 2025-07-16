@@ -12,7 +12,7 @@ from metadrive.utils.math_utils import safe_clip
 ScreenMessage.SCALE = 0.1
 
 class MyKeyboardController(KeyboardController):
-    # Update Parameters
+    # Update only Parameters
     STEERING_INCREMENT = 0.05
     STEERING_DECAY = 0.5
 
@@ -25,18 +25,22 @@ class MyKeyboardController(KeyboardController):
 class MyTakeoverPolicy(TakeoverPolicy):
     """
     Record the takeover signal
+    We're overriding the __init__ method from the parent class TakeoverPolicy.
+    the final value of self.controller will be whatever is 
+    set in MyTakeoverPolicy, assuming the config conditions are met.
     """
     def __init__(self, obj, seed):
         super(TakeoverPolicy, self).__init__(obj, seed)
         config = get_global_config()
         if config["manual_control"] and config["use_render"]:
+            # type of controller is defined in the config file.
             if config["controller"] == "joystick":
                 self.controller = SteeringWheelController()
             elif config["controller"] == "keyboard":
                 self.controller = MyKeyboardController(False)
             else:
                 raise ValueError("Unknown Policy: {}".format(config["controller"]))
-        self.takeover = False
+        self.takeover = False  # in the runtime it will be True for manual controller
 
 
 class HumanInTheLoopEnv(SafeMetaDriveEnv):
@@ -53,7 +57,7 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
                 "cost_to_reward": True,
                 "traffic_density": 0.06,
                 "manual_control": False,
-                "controller": "joystick",
+                "controller": "keyboard",
                 "agent_policy": MyTakeoverPolicy,
                 "only_takeover_start_cost": True,
                 "main_exp": True,
@@ -79,15 +83,22 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
             self.config["vehicle_config"]["spawn_lane_index"] = (FirstPGBlock.NODE_1, FirstPGBlock.NODE_2,
                                                                  self.engine.np_random.randint(3))
         # keyboard is not as good as steering wheel, so set a small speed limit
-        self.vehicle.update_config({"max_speed": 25 if self.config["controller"] == "keyboard" else 40})
+        self.vehicle.update_config({"max_speed": 50 if self.config["controller"] == "keyboard" else 40})
         return ret
 
     def _get_step_return(self, actions, engine_info):
+        """
+        it is a protected method that is called internally by 
+        the environment's step() method to process the results 
+        of an environment step and to build the info dictionary.
+        """
         o, r, d, engine_info = super(HumanInTheLoopEnv, self)._get_step_return(actions, engine_info)
         if self.config["in_replay"]:
             return o, r, d, engine_info
         controller = self.engine.get_policy(self.vehicle.id)
         last_t = self.t_o
+        #  If controller has the attribute takeover, it returns its value (controller.takeover)
+        # otherwise False
         self.t_o = controller.takeover if hasattr(controller, "takeover") else False
         engine_info["takeover_start"] = True if not last_t and self.t_o else False
         engine_info["takeover"] = self.t_o
@@ -119,11 +130,11 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
             self.engine.taskMgr.step()
         if self.config["use_render"] and self.config["main_exp"] and not self.config["in_replay"]:
             super(HumanInTheLoopEnv, self).render(text={
-                "Total Cost": self.episode_cost,
-                "Takeover Cost": self.total_takeover_cost,
-                "Takeover": self.t_o,
-                "COST": ret[-1]["takeover_cost"],
-                "Stop (Press E)": ""
+                # "Total Cost": self.episode_cost,  # All costs this episode
+                "Takeover Cost": self.total_takeover_cost,  # All takeover-related costs this episode
+                "Takeover": self.t_o,  # boolean
+                # "COST": ret[-1]["takeover_cost"],  # Takeover cost for the most recent step
+                # "Stop (Press E)": ""
             })
         return ret
 

@@ -19,7 +19,7 @@ if __name__ == '__main__':
     """
     Data = Tuple[o, a, d, r, i]
     """
-    num = int(100)
+    num = int(3)
     pool = []
 
     env = HumanInTheLoopEnv(dict(manual_control=True, use_render=True, agent_policy=ManualControlPolicy))

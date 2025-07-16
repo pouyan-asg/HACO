@@ -36,6 +36,8 @@ NEWBIE_ACTION = "newbie_action"
 TAKEOVER = "takeover"
 
 # HACO Romve the Lagrangian Multiplier from SACLag. Instead, it directly minimizes the takeover cost
+
+# a dictionary merged from SACPIDConfig and some HACO-specific overrides.
 HACOConfig = merge_dicts(SACPIDConfig,
                          {
                              "info_cost_key": "takeover_cost",
@@ -425,6 +427,8 @@ HACOPolicy = SACPIDPolicy.with_updates(name="HACO",
                                        postprocess_fn=postprocess_trajectory,
                                        loss_fn=sac_actor_critic_loss)
 
+# When you create or run a HACOTrainer, you can pass a config dictionary 
+# that overrides any of the keys in HACOConfig (and thus also in SACPIDConfig).
 HACOTrainer = SACLagTrainer.with_updates(name="HACO",
                                          default_config=HACOConfig,
                                          default_policy=HACOPolicy,

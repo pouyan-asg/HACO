@@ -1,0 +1,7 @@
+07/15/25 20:47:06 INFO	Epoch: 0
+07/15/25 20:47:06 INFO	Train_data_set_size: 1000.00	std: 0.00	min: 1000	max: 1000
+07/15/25 20:47:06 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.03
+07/15/25 20:47:06 INFO	Train_epoch_loss: 0.08	std: 0.04	min: 0.05	max: 0.42
+07/15/25 20:47:06 INFO	Train_epoch_training_time: 0.02	std: 0.00	min: 0.02	max: 0.02
+07/15/25 20:47:06 INFO	Train_last_epoch_loss: 0.05	std: 0.00	min: 0.05	max: 0.05
+07/15/25 20:47:06 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
