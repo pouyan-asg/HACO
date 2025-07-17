@@ -1,0 +1,63 @@
+07/16/25 15:55:57 INFO	Epoch: 0
+07/16/25 15:55:57 INFO	Train_data_set_size: 1000.00	std: 0.00	min: 1000	max: 1000
+07/16/25 15:55:57 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.04
+07/16/25 15:55:57 INFO	Train_epoch_loss: 0.08	std: 0.04	min: 0.05	max: 0.42
+07/16/25 15:55:57 INFO	Train_epoch_training_time: 0.02	std: 0.00	min: 0.01	max: 0.02
+07/16/25 15:55:57 INFO	Train_last_epoch_loss: 0.05	std: 0.00	min: 0.05	max: 0.05
+07/16/25 15:55:57 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/16/25 16:00:21 INFO	Epoch: 1
+07/16/25 16:00:21 INFO	Train_agent_samples: 1763.00	std: 0.00	min: 1763	max: 1763
+07/16/25 16:00:21 INFO	Train_human_samples_size: 336.00	std: 0.00	min: 336	max: 336
+07/16/25 16:00:21 INFO	Train_mean_episode_cost: 1.75	std: 0.00	min: 1.75	max: 1.75
+07/16/25 16:00:21 INFO	Train_mean_episode_reward: 327.96	std: 0.00	min: 327.96	max: 327.96
+07/16/25 16:00:21 INFO	Train_mean_step_reward: 1.19	std: 0.00	min: 1.19	max: 1.19
+07/16/25 16:00:21 INFO	Train_sample_time: 198.40	std: 0.00	min: 198.40	max: 198.40
+07/16/25 16:00:21 INFO	Train_success_rate: 0.75	std: 0.00	min: 0.75	max: 0.75
+07/16/25 16:00:21 INFO	Train_data_set_size: 3443.00	std: 0.00	min: 3443	max: 3443
+07/16/25 16:00:21 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.02
+07/16/25 16:00:21 INFO	Train_epoch_loss: 0.13	std: 0.02	min: 0.11	max: 0.24
+07/16/25 16:00:21 INFO	Train_epoch_training_time: 0.06	std: 0.01	min: 0.01	max: 0.06
+07/16/25 16:00:21 INFO	Train_last_epoch_loss: 0.10	std: 0.00	min: 0.10	max: 0.10
+07/16/25 16:00:21 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/16/25 16:05:17 INFO	Epoch: 2
+07/16/25 16:05:17 INFO	Train_agent_samples: 2608.00	std: 0.00	min: 2608	max: 2608
+07/16/25 16:05:17 INFO	Train_human_samples_size: 599.00	std: 0.00	min: 599	max: 599
+07/16/25 16:05:17 INFO	Train_mean_episode_cost: 3.00	std: 0.00	min: 3.00	max: 3.00
+07/16/25 16:05:17 INFO	Train_mean_episode_reward: 279.71	std: 0.00	min: 279.71	max: 279.71
+07/16/25 16:05:17 INFO	Train_mean_step_reward: 0.76	std: 0.00	min: 0.76	max: 0.76
+07/16/25 16:05:17 INFO	Train_sample_time: 210.29	std: 0.00	min: 210.29	max: 210.29
+07/16/25 16:05:17 INFO	Train_success_rate: 0.67	std: 0.00	min: 0.67	max: 0.67
+07/16/25 16:05:17 INFO	Train_data_set_size: 5004.00	std: 0.00	min: 5004	max: 5004
+07/16/25 16:05:17 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.01
+07/16/25 16:05:17 INFO	Train_epoch_loss: 0.11	std: 0.02	min: 0.09	max: 0.18
+07/16/25 16:05:17 INFO	Train_epoch_training_time: 0.08	std: 0.01	min: 0.01	max: 0.09
+07/16/25 16:05:17 INFO	Train_last_epoch_loss: 0.09	std: 0.00	min: 0.09	max: 0.09
+07/16/25 16:05:17 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/16/25 16:11:13 INFO	Epoch: 3
+07/16/25 16:11:13 INFO	Train_agent_samples: 3564.00	std: 0.00	min: 3564	max: 3564
+07/16/25 16:11:13 INFO	Train_human_samples_size: 960.00	std: 0.00	min: 960	max: 960
+07/16/25 16:11:13 INFO	Train_mean_episode_cost: 1.75	std: 0.00	min: 1.75	max: 1.75
+07/16/25 16:11:13 INFO	Train_mean_episode_reward: 253.83	std: 0.00	min: 253.83	max: 253.83
+07/16/25 16:11:13 INFO	Train_mean_step_reward: 0.77	std: 0.00	min: 0.77	max: 0.77
+07/16/25 16:11:13 INFO	Train_sample_time: 245.52	std: 0.00	min: 245.52	max: 245.52
+07/16/25 16:11:13 INFO	Train_success_rate: 0.50	std: 0.00	min: 0.50	max: 0.50
+07/16/25 16:11:13 INFO	Train_data_set_size: 6444.00	std: 0.00	min: 6444	max: 6444
+07/16/25 16:11:13 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.01
+07/16/25 16:11:13 INFO	Train_epoch_loss: 0.09	std: 0.02	min: 0.07	max: 0.18
+07/16/25 16:11:13 INFO	Train_epoch_training_time: 0.11	std: 0.01	min: 0.01	max: 0.12
+07/16/25 16:11:13 INFO	Train_last_epoch_loss: 0.07	std: 0.00	min: 0.07	max: 0.07
+07/16/25 16:11:13 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000
+07/16/25 16:17:02 INFO	Epoch: 4
+07/16/25 16:17:02 INFO	Train_agent_samples: 4393.00	std: 0.00	min: 4393	max: 4393
+07/16/25 16:17:02 INFO	Train_human_samples_size: 1290.00	std: 0.00	min: 1290	max: 1290
+07/16/25 16:17:02 INFO	Train_mean_episode_cost: 2.00	std: 0.00	min: 2.00	max: 2.00
+07/16/25 16:17:02 INFO	Train_mean_episode_reward: 224.70	std: 0.00	min: 224.70	max: 224.70
+07/16/25 16:17:02 INFO	Train_mean_step_reward: 0.97	std: 0.00	min: 0.97	max: 0.97
+07/16/25 16:17:02 INFO	Train_sample_time: 207.85	std: 0.00	min: 207.85	max: 207.85
+07/16/25 16:17:02 INFO	Train_success_rate: 0.40	std: 0.00	min: 0.40	max: 0.40
+07/16/25 16:17:02 INFO	Train_data_set_size: 8263.00	std: 0.00	min: 8263	max: 8263
+07/16/25 16:17:02 INFO	Train_ensemble_variance: 0.00	std: 0.00	min: 0.00	max: 0.01
+07/16/25 16:17:02 INFO	Train_epoch_loss: 0.09	std: 0.02	min: 0.06	max: 0.17
+07/16/25 16:17:02 INFO	Train_epoch_training_time: 0.14	std: 0.01	min: 0.01	max: 0.15
+07/16/25 16:17:02 INFO	Train_last_epoch_loss: 0.06	std: 0.00	min: 0.06	max: 0.06
+07/16/25 16:17:02 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000

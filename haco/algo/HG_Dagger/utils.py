@@ -136,6 +136,7 @@ def train_model(
     log_rollouts_fn=None,
     log_rollouts_n_episodes=5,
     progress_bar=True,
+    device="cpu"
 ):
     """
     Trains the model using supervised learning, similar to imitation.algorithms.bc.BC.train.
@@ -143,7 +144,8 @@ def train_model(
     """
     X_train = np.array(X_train)
     y_train = np.array(y_train)
-    device = model.device
+    device = device if isinstance(device, torch.device) else torch.device(device)
+    print("\ndevice:", device)
 
     minibatch_size = minibatch_size or batch_size
     assert batch_size % minibatch_size == 0, "batch_size must be a multiple of minibatch_size"
@@ -154,8 +156,10 @@ def train_model(
     )
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, drop_last=True)
 
+    # Creates an SGD optimizer for each network in the ensemble, with L2 regularization.
     optimizer = [torch.optim.SGD(model.pis[i].parameters(), lr=learning_rate, weight_decay=lambda_l2)
                  for i in range(model.num_nets)]
+    # Sets the loss function to mean squared error.
     criterion = torch.nn.MSELoss()
 
     total_batches = 0

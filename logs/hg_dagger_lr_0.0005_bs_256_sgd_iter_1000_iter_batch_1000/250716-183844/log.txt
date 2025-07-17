@@ -1,0 +1,6 @@
+07/16/25 18:39:03 INFO	Epoch: 0
+07/16/25 18:39:03 INFO	Train_epoch: 499.50	std: 288.68	min: 0	max: 999
+07/16/25 18:39:03 INFO	Train_epoch_loss: 0.40	std: 0.11	min: 0.29	max: 2.00
+07/16/25 18:39:03 INFO	Train_batch_loss: 0.40	std: 0.10	min: 0.29	max: 1.30
+07/16/25 18:39:03 INFO	Train_last_epoch_loss: 0.18	std: 0.00	min: 0.18	max: 0.18
+07/16/25 18:39:03 INFO	Train_total_sgd_epoch_num: 1000.00	std: 0.00	min: 1000	max: 1000

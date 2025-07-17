@@ -8,13 +8,10 @@ from haco.utils.human_in_the_loop_env import HumanInTheLoopEnv
 from stable_baselines3.common.vec_env.subproc_vec_env import SubprocVecEnv
 import datetime
 import os
+import torch
 
 """
-requirement for IWR/HG-Dagger/GAIl:
-
-create -n haco-hg-dagger python version=3.7
-1. pip install loguru imageio easydict tensorboardX pyyaml  stable_baselines3 pickle5
-2. conda install pytorch==1.5.0 torchvision==0.6.0 cudatoolkit=9.2 -c pytorch
+URL: https://arxiv.org/pdf/1810.02890
 """
 
 # hyperpara
@@ -27,7 +24,13 @@ batch_size = 256
 # need_eval = False  # we do not perform online evaluation. Instead, we evaluate by saved model
 # evaluation_episode_num = 30
 num_sgd_epoch = 1000  # sgd epoch on data set
-device = "cuda"
+
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("CUDA is available! Using GPU.")
+else:
+    device = torch.device("cpu")
+    print("CUDA is not available. Using CPU.")
 
 # training env_config/test env config
 training_config = baseline_train_config
@@ -70,7 +73,9 @@ if __name__ == "__main__":
                 num_epochs=num_sgd_epoch,
                 batch_size=batch_size,
                 learning_rate=learning_rate,
-                exp_log=exp_log)
+                exp_log=exp_log,
+                device=device
+                )
     # if need_eval:
     #     evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
     exp_log.end_iteration(0)
@@ -137,7 +142,8 @@ if __name__ == "__main__":
                                 num_epochs=num_sgd_epoch,
                                 batch_size=batch_size,
                                 learning_rate=learning_rate,
-                                exp_log=exp_log)
+                                exp_log=exp_log,
+                                device=device)
                     # if need_eval:
                     #     evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
                     break

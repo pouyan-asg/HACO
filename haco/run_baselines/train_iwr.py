@@ -6,13 +6,11 @@ from haco.algo.IWR.utils import *
 from haco.utils.config import baseline_eval_config, baseline_train_config
 from haco.utils.human_in_the_loop_env import HumanInTheLoopEnv
 from stable_baselines3.common.vec_env.subproc_vec_env import SubprocVecEnv
+import datetime
+import os
 
 """
-requirement for IWR/HG-Dagger/GAIl:
-
-create -n haco-iwr python version=3.7
-1. pip install loguru imageio easydict tensorboardX pyyaml  stable_baselines3 pickle5
-2. conda install pytorch==1.5.0 torchvision==0.6.0 cudatoolkit=9.2 -c pytorch
+URL: https://sites.google.com/stanford.edu/iwr
 """
 
 
@@ -28,48 +26,62 @@ def IWR_balance_sample(agent_samples, human_samples):
     ratio = int(agent_sample_num / human_sample_num)
 
     # according to the practical experience reported in paper, repeat the human samples to mix in same proportion
+    # in theory of the paper they mentione dequal sampling (page3: https://arxiv.org/pdf/2012.06733)
     ret_x = agent_x + ratio * human_x
     ret_y = agent_y + ratio * human_y
     return ret_x, ret_y
 
 
 # hyperpara
-BC_WARMUP_DATA_USAGE = 30000  # use human data to do warm up
+BC_WARMUP_DATA_USAGE = 1000  # use human data to do warm up
 NUM_ITS = 5
-STEP_PER_ITER = 5000
+STEP_PER_ITER = 1000
 learning_rate = 5e-4
 batch_size = 256
 
 need_eval = False  # we do not perform online evaluation. Instead, we evaluate by saved model
 evaluation_episode_num = 30
 num_sgd_epoch = 1000  # sgd epoch on data set
-device = "cuda"
+
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("CUDA is available! Using GPU.")
+else:
+    device = torch.device("cpu")
+    print("CUDA is not available. Using CPU.")
 
 # training env_config/test env config
 training_config = baseline_train_config
 training_config["use_render"] = True
 training_config["manual_control"] = True
+training_config["main_exp"] = True
 eval_config = baseline_eval_config
 
 if __name__ == "__main__":
-    tm = time.localtime(time.time())
-    tm_stamp = "%s-%s-%s-%s-%s-%s" % (tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec)
-    log_dir = os.path.join(
-        "IWR_lr_{}_bs_{}_sgd_iter_{}_iter_batch_{}".format(learning_rate, batch_size, num_sgd_epoch,
-                                                           STEP_PER_ITER), tm_stamp)
-    exp_log = Experiment()
-    exp_log.init(log_dir=log_dir)
+    tm_stamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
+    folder_dir = os.path.join(
+        "IWR_lr_{}_bs_{}_sgd_iter_{}_iter_batch_{}".format(
+            learning_rate, batch_size, num_sgd_epoch, STEP_PER_ITER), tm_stamp)
+    
+    root_path = "/home/pouyan/phd/imitation_learning/hgdagger/HACO/logs"
+    log_dir = os.path.join(root_path, folder_dir)
+
+    exp_log = Experiment(log_dir)
     model_save_path = os.path.join(log_dir, "IWR_models")
     os.mkdir(model_save_path)
 
-    training_env = SubprocVecEnv(
-        [lambda: HumanInTheLoopEnv(training_config)])  # seperate with eval env to avoid metadrive collapse
+    # seperate with eval env to avoid metadrive collapse
+    training_env = SubprocVecEnv([lambda: HumanInTheLoopEnv(training_config)])
     eval_env = HumanInTheLoopEnv(eval_config)
+
     obs_shape = eval_env.observation_space.shape
     action_shape = eval_env.action_space.shape
 
-    # fill buffer with expert data
-    agent_samples = load_human_data("../human_traj_100_new.json", data_usage=BC_WARMUP_DATA_USAGE)
+    # fill buffer with warmup expert data
+    agent_samples = load_human_data(
+        "/home/pouyan/phd/imitation_learning/hgdagger/HACO/haco/utils/human_traj_3.json",
+        data_usage=BC_WARMUP_DATA_USAGE)
+    
     human_samples = {"state": [],
                      "action": [],
                      "next_state": [],
@@ -77,6 +89,7 @@ if __name__ == "__main__":
                      "terminal": []}
 
     # train first epoch via human data
+    print("\033[92m\nWarm up Training ...\n\033[0m")
     agent = Ensemble(obs_shape, action_shape, device=device).to(device).float()
     X_train, y_train = agent_samples["state"], agent_samples["action"]
     train_model(agent, X_train, y_train,
@@ -84,7 +97,8 @@ if __name__ == "__main__":
                 num_epochs=num_sgd_epoch,
                 batch_size=batch_size,
                 learning_rate=learning_rate,
-                exp_log=exp_log)
+                exp_log=exp_log,
+                device=device)
     if need_eval:
         evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
     exp_log.end_iteration(0)
@@ -98,12 +112,16 @@ if __name__ == "__main__":
         done_num = 0
         state = training_env.reset()[0]
         # for user friendly :)
+        print("\033[92m\nLet's Go!\033[0m")
+        print(f"\033[92m\nIteration: {iteration}\033[0m")
         training_env.env_method("stop")
-        print("Finish training iteration:{}, Press S to Start new iteration".format(iteration - 1))
+        print("\033[91m\nPress E to Start new iteration\033[0m")
         sample_start = time.time()
 
         while True:
-
+            # main loop
+            if steps % 100 == 0:
+                print(f"\033[93m\nIteration: {iteration}, Steps: {steps}\033[0m")
             next_state, r, done, info = training_env.step(np.array([agent.act(torch.tensor(state, device=device))]))
             next_state = next_state[0]
             r = r[0]
@@ -136,6 +154,7 @@ if __name__ == "__main__":
                 if info["arrive_dest"]:
                     success_num += 1
                 done_num += 1
+                print(f"\033[93mDone Num: {done_num}\033[0m")
                 if steps > STEP_PER_ITER:
                     exp_log.scalar(is_train=True, mean_episode_reward=episode_reward / done_num,
                                    mean_episode_cost=episode_cost / done_num,
@@ -153,7 +172,8 @@ if __name__ == "__main__":
                                 num_epochs=num_sgd_epoch,
                                 batch_size=batch_size,
                                 learning_rate=learning_rate,
-                                exp_log=exp_log)
+                                exp_log=exp_log,
+                                device=device)
                     if need_eval:
                         evaluation(eval_env, agent, evaluation_episode_num=evaluation_episode_num, exp_log=exp_log)
                     break
