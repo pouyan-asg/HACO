@@ -14,6 +14,29 @@ import torch
 URL: https://arxiv.org/pdf/1810.02890
 """
 
+"""
+state: [x, y, theta, speed, lidar_scan_0, lidar_scan_1, ...]
+action: [steering_angle, speed]
+reward: float
+done: bool
+info: {
+    "raw_action": [steering_angle, speed],
+    "takeover": bool,
+    "arrive_dest": bool,
+    "native_cost": float,
+    "cost": float,
+    "takeover_cost": float,
+    "total_takeover_cost": float,
+    "total_native_cost": float,
+    "collision": bool,
+    "out_of_route": bool,
+    "crash_sidewalk": bool,
+    "on_lane": bool,
+    "vehicle": VehicleObject,  # contains vehicle state and other info
+    "engine_info": dict,  # additional info from the engine
+}
+"""
+
 # hyperpara
 BC_WARMUP_DATA_USAGE = 1000  # use human data to do warm up (maximum number of samples)
 NUM_ITS = 5
@@ -25,12 +48,8 @@ batch_size = 256
 # evaluation_episode_num = 30
 num_sgd_epoch = 1000  # sgd epoch on data set
 
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("CUDA is available! Using GPU.")
-else:
-    device = torch.device("cpu")
-    print("CUDA is not available. Using CPU.")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 # training env_config/test env config
 training_config = baseline_train_config

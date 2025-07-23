@@ -67,7 +67,7 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
                 "in_replay": False,
                 "random_spawn_lane_index": False,
                 "target_vehicle_configs": {
-                    "default_agent": {"spawn_lane_index": (FirstPGBlock.NODE_1, FirstPGBlock.NODE_2, 1)}}
+                "default_agent": {"spawn_lane_index": (FirstPGBlock.NODE_1, FirstPGBlock.NODE_2, 1)}}
             },
             allow_add_new_key=True
         )
@@ -126,6 +126,28 @@ class HumanInTheLoopEnv(SafeMetaDriveEnv):
     def step(self, actions):
         self.input_action = copy.copy(actions)
         ret = super(HumanInTheLoopEnv, self).step(actions)
+        # print(self.vehicle.position)
+        # print(self.vehicle.position, self.vehicle.heading, self.vehicle.speed, self.vehicle.on_lane,
+        #       self.vehicle.crash_sidewalk, self.vehicle.out_of_route, self.t_o, self.total_takeover_cost)
+        # lane = self.vehicle.lane
+        # longitudinal, lateral = lane.local_coordinates(self.vehicle.position)
+        # print('longitudinal:', longitudinal)
+        # print('lateral:', lateral)
+        # print("Vehicle Position:", self.vehicle.position)
+        # print("\n")
+        lane = self.vehicle.lane
+        longitudinal, lateral = lane.local_coordinates(self.vehicle.position)
+        print('lateral:', lateral)
+        lane_width = lane.width
+        distance_to_left = lane_width / 2 - lateral
+        distance_to_right = lane_width / 2 + lateral  # or lane_width / 2 - abs(lateral)
+        print("Distance to left boundary:", distance_to_left)
+        print("Distance to right boundary:", distance_to_right)
+        print("\n")
+        distance_to_boundary = lane_width / 2 - abs(lateral)
+        print("Distance to nearest boundary:", distance_to_boundary)
+        print("\n")
+
         while self.in_stop:
             self.engine.taskMgr.step()
         if self.config["use_render"] and self.config["main_exp"] and not self.config["in_replay"]:
